@@ -1,10 +1,14 @@
 const express = require('express');
-const { readTalkerData } = require('./utils/fsUtils');
+const { 
+  readTalkerData, 
+  readTalkerDataWithId,
+} = require('./utils/fsUtils');
 
 const app = express();
 app.use(express.json());
 
 const HTTP_OK_STATUS = 200;
+const HTTP_PNF_STATUS = 404;
 const PORT = process.env.PORT || '3001';
 
 // não remova esse endpoint, e para o avaliador funcionar
@@ -18,8 +22,15 @@ app.listen(PORT, () => {
 
 app.get('/talker', async (_req, res) => {
   const talkers = await readTalkerData();
-  if (!talkers) {
-    return res.status(HTTP_OK_STATUS).json([]);
-  }
+  
   return res.status(HTTP_OK_STATUS).json(talkers);
+});
+
+app.get('/talker/:id', async (req, res) => {
+  const { id } = req.params;
+  const [talker] = await readTalkerDataWithId(Number(id));
+  if (!talker) {
+    return res.status(HTTP_PNF_STATUS).json({ message: 'Pessoa palestrante não encontrada' });
+  }
+  return res.status(HTTP_OK_STATUS).json(talker);
 });

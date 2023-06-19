@@ -14,6 +14,18 @@ async function readTalkerData() {
   }
 }
 
+async function readTalkerDataWithId(id) {
+  try {
+    const data = await readTalkerData();
+    const talker = data.filter((t) => t.id === id);
+
+    return talker;
+  } catch (err) {
+    console.error(`erro ao procurar no arquivo: ${err}`);
+  }
+}
+
 module.exports = {
   readTalkerData,
+  readTalkerDataWithId,
 };
