@@ -2,6 +2,7 @@ const express = require('express');
 const { 
   readTalkerData, 
   readTalkerDataWithId,
+  tokenGenerator,
 } = require('./utils/fsUtils');
 
 const app = express();
@@ -33,4 +34,10 @@ app.get('/talker/:id', async (req, res) => {
     return res.status(HTTP_PNF_STATUS).json({ message: 'Pessoa palestrante não encontrada' });
   }
   return res.status(HTTP_OK_STATUS).json(talker);
+});
+
+app.post('/login', (_req, res) => {
+  const token = tokenGenerator();
+
+  return res.status(HTTP_OK_STATUS).json({ token });
 });
