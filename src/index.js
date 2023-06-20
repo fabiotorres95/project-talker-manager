@@ -13,6 +13,9 @@ const {
   checkToken,
   checkName,
   checkAge,
+  checkTalk,
+  checkWatchedAt,
+  checkRate,
 } = require('./utils/middlewares');
 
 const app = express();
@@ -53,10 +56,19 @@ app.post('/login', validateEmail, validatePassword, (_req, res) => {
   return res.status(HTTP_OK_STATUS).json({ token });
 });
 
-app.post('/talker', checkToken, checkName, checkAge, async (req, res) => {
-  const newData = req.body;
+app.post(
+  '/talker', 
+  checkToken, 
+  checkName, 
+  checkAge,
+  checkTalk,
+  checkWatchedAt,
+  checkRate,
+  async (req, res) => {
+    const newData = req.body;
 
-  const newDataWithId = await writeTalkerData(newData);
+    const newDataWithId = await writeTalkerData(newData);
 
-  return res.status(HTTP_CREATED_STATUS).json(newDataWithId);
-});
+    return res.status(HTTP_CREATED_STATUS).json(newDataWithId);
+  },
+);

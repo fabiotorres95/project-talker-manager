@@ -3,6 +3,7 @@ const path = require('path');
 
 const TALKERS_PATH = '../talker.json';
 const validTokens = [];
+let nextId = 6;
 
 async function readTalkerData() {
   try {
@@ -41,10 +42,12 @@ function tokenGenerator() {
 async function writeTalkerData(data) {
   try {
     const oldData = await readTalkerData();
-    const dataWithId = { id: Date.now(), ...data };
+    const dataWithId = { id: nextId, ...data };
   
     const allData = JSON.stringify([...oldData, dataWithId]);
     await fs.writeFile(path.resolve(__dirname, TALKERS_PATH), allData);
+
+    nextId += 1;
 
     return dataWithId;
   } catch (err) {
