@@ -55,10 +55,30 @@ async function writeTalkerData(data) {
   }
 }
 
+async function updateTalkerData(id, receivedData) {
+  const talkerData = await readTalkerData();
+  const updatedData = { id, ...receivedData };
+  const updatedTalkerData = talkerData.reduce((allData, currentData) => {
+    if (currentData.id === updatedData.id) return [...allData, updatedData];
+    return [...allData, currentData];
+  }, []);
+
+  const jsonData = JSON.stringify(updatedTalkerData);
+  try {
+    await fs.writeFile(path.resolve(__dirname, TALKERS_PATH), jsonData);
+
+    console.log(`Atualizou palestrante com o id ${id}`);
+    return updatedData;
+  } catch (err) {
+    console.error(`Erro na escrita do arquivo ${err}`);
+  }
+}
+
 module.exports = {
   validTokens,
   readTalkerData,
   readTalkerDataWithId,
   tokenGenerator,
   writeTalkerData,
+  updateTalkerData,
 };

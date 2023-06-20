@@ -5,6 +5,7 @@ const {
   readTalkerDataWithId,
   tokenGenerator,
   writeTalkerData,
+  updateTalkerData,
 } = require('./utils/fsUtils');
 
 const {
@@ -70,5 +71,27 @@ app.post(
     const newDataWithId = await writeTalkerData(newData);
 
     return res.status(HTTP_CREATED_STATUS).json(newDataWithId);
+  },
+);
+
+app.put(
+  '/talker/:id',
+  checkToken,
+  checkName,
+  checkAge,
+  checkTalk,
+  checkWatchedAt,
+  checkRate,
+  async (req, res) => {
+    const { id } = req.params;
+    const [talker] = await readTalkerDataWithId(Number(id));
+    if (!talker) {
+      return res.status(HTTP_PNF_STATUS).json({ message: 'Pessoa palestrante não encontrada' });
+    }
+
+    const newData = req.body;
+    const updatedData = await updateTalkerData(Number(id), newData);
+
+    return res.status(HTTP_OK_STATUS).json(updatedData);
   },
 );
