@@ -2,6 +2,7 @@ const fs = require('fs').promises;
 const path = require('path');
 
 const TALKERS_PATH = '../talker.json';
+const validTokens = [];
 
 async function readTalkerData() {
   try {
@@ -32,12 +33,29 @@ function tokenGenerator() {
     const charIndex = Math.floor(Math.random() * (characters.length - 1)); 
     token += characters[charIndex];
   }
+  validTokens.push(token);
 
   return token;
 } 
 
+async function writeTalkerData(data) {
+  try {
+    const oldData = await readTalkerData();
+    const dataWithId = { id: Date.now(), ...data };
+  
+    const allData = JSON.stringify([...oldData, dataWithId]);
+    await fs.writeFile(path.resolve(__dirname, TALKERS_PATH), allData);
+
+    return dataWithId;
+  } catch (err) {
+    console.log(`Erro na escrita do arquivo: ${err}`);
+  }
+}
+
 module.exports = {
+  validTokens,
   readTalkerData,
   readTalkerDataWithId,
   tokenGenerator,
+  writeTalkerData,
 };

@@ -4,17 +4,22 @@ const {
   readTalkerData, 
   readTalkerDataWithId,
   tokenGenerator,
+  writeTalkerData,
 } = require('./utils/fsUtils');
 
 const {
   validateEmail,
   validatePassword,
+  checkToken,
+  checkName,
+  checkAge,
 } = require('./utils/middlewares');
 
 const app = express();
 app.use(express.json());
 
 const HTTP_OK_STATUS = 200;
+const HTTP_CREATED_STATUS = 201;
 const HTTP_PNF_STATUS = 404;
 const PORT = process.env.PORT || '3001';
 
@@ -46,4 +51,12 @@ app.post('/login', validateEmail, validatePassword, (_req, res) => {
   const token = tokenGenerator();
 
   return res.status(HTTP_OK_STATUS).json({ token });
+});
+
+app.post('/talker', checkToken, checkName, checkAge, async (req, res) => {
+  const newData = req.body;
+
+  const newDataWithId = await writeTalkerData(newData);
+
+  return res.status(HTTP_CREATED_STATUS).json(newDataWithId);
 });
