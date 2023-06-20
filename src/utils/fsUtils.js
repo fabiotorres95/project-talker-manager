@@ -74,6 +74,20 @@ async function updateTalkerData(id, receivedData) {
   }
 }
 
+async function deleteTalkerData(id) {
+  const talkerData = await readTalkerData();
+  const newTalkerData = talkerData.filter((talker) => talker.id !== id);
+
+  const jsonData = JSON.stringify(newTalkerData);
+  try {
+    await fs.writeFile(path.resolve(__dirname, TALKERS_PATH), jsonData);
+
+    console.log(`Deletou palestrante com o id ${id}`);
+  } catch (err) {
+    console.log(`Erro na escrita do arquivo ${err}`);
+  }
+}
+
 module.exports = {
   validTokens,
   readTalkerData,
@@ -81,4 +95,5 @@ module.exports = {
   tokenGenerator,
   writeTalkerData,
   updateTalkerData,
+  deleteTalkerData,
 };

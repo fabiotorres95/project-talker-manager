@@ -6,6 +6,7 @@ const {
   tokenGenerator,
   writeTalkerData,
   updateTalkerData,
+  deleteTalkerData,
 } = require('./utils/fsUtils');
 
 const {
@@ -24,6 +25,7 @@ app.use(express.json());
 
 const HTTP_OK_STATUS = 200;
 const HTTP_CREATED_STATUS = 201;
+const HTTP_NO_CONT_STATUS = 204;
 const HTTP_PNF_STATUS = 404;
 const PORT = process.env.PORT || '3001';
 
@@ -95,3 +97,10 @@ app.put(
     return res.status(HTTP_OK_STATUS).json(updatedData);
   },
 );
+
+app.delete('/talker/:id', checkToken, async (req, res) => {
+  const { id } = req.params;
+  await deleteTalkerData(Number(id));
+
+  return res.status(HTTP_NO_CONT_STATUS).end();
+});
