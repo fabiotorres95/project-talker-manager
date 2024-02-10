@@ -8,3 +8,6 @@ Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua cr
 - quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
 - quais arquivos/pastas foram desenvolvidos pela Trybe.
 -->
+Projeto Talker Manager - Trybe curso Back-End seção 4: "Introdução ao Desenvolvimento Web com Node.js"
+
+Back-End - projeto 4 de 9
